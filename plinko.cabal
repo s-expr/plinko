@@ -71,7 +71,7 @@ executable plinko
     build-depends:    hinotify, base ^>=4.15.1.0
 
     -- Directories containing source files.
-    hs-source-dirs:   app
+    hs-source-dirs:   plinko
 
     -- Base language which the package is written in.
     default-language: Haskell2010

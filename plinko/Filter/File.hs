@@ -1,12 +1,12 @@
-
-module FileInfo (
-  FileInfo(
-      fd,
-      path,
-      size,
-      mimeInfo,
-      dateCreated)
-  ) where
+module File (
+  FileInfo,
+  FileFilter,
+  fd,
+  path,
+  size,
+  mimeInfo,
+  dataCreated
+) where
 
 -- probably use GIO or something along those lines ${1:String}
 -- model the fileinfo types with whatever that turns out to be
@@ -21,3 +21,10 @@ data FileInfo = FileInfo{
   dateCreated :: (),
   dateModified :: ()
 }
+
+type FileFilter = FileInfo -> Bool
+
+sizeLess :: Integer -> FileFilter
+sizeLess i = (i<) . FileInfo.size
+
+
