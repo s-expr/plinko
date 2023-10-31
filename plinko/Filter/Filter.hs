@@ -2,30 +2,39 @@
 {-# OPTIONS_GHC -Wno-tped-holes #-}
 {-# LANGUAGE GADTs #-}
 module Filter
-  (Filter)
-where
+  ( Filter
+  , constTrue
+  , constFalse
+  , apply
+  , (<&&>)
+  , (<||>)
+  , fnot
+  ) where
 
-import 
--- ====Filters====
--- Size
--- Mimetype
--- Regex on name/path
--- Date Modified
--- Permissions
--- Owner
--- Filters are predicates on FileInfo and return true or false 
+newtype Filter info = Filter (info -> Bool)
 
+constTrue :: Filter a 
+constTrue = Filter $ const True
 
--- Option 1 --
+constFalse :: Filter a
+constFalse = Filter $ const False
 
-class (f :: a -> Bool) => Filter f where
+apply :: Filter info -> info -> Bool
+apply (Filter f) = f
 
-  (<&>) :: f -> f -> f
-  (<&>) f1 f2 fi = f1 ap fi && f2 fi
+join
+  :: (Bool -> Bool -> Bool)
+  -> Filter info
+  -> Filter info
+  -> Filter info
+join op f1 f2 =
+  Filter $ \info -> op (apply f1 info) (apply f2 info)
+
+(<&&>) :: Filter info -> Filter info -> Filter info
+(<&&>) = join (&&)
   
-  (<|>) :: f -> f -> f
-  (<|>) f1 f2 fi = f1 fi || f2 fi
+(<||>) :: Filter info -> Filter info -> Filter info
+(<||>) = join (||)
 
-infixl 7 <&>
-infixr 7 <|>
-
+fnot :: Filter info -> Filter info
+fnot = join (const not) constTrue
