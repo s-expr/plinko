@@ -1,10 +1,25 @@
 module Folder (
-  FolderInfo,
-  FolderFilter
+  FolderHandle
 ) where
 
-type FolderInfo = ()
-type FolderFilter = FolderInfo -> Bool
+type FD = ()
+type Date = ()
+
+
+--cacheable information for Folders
+data FolderHandle = FolderHandle {
+  fd :: FD,
+  dateCreated :: Maybe Date,
+  dateModified :: Maybe Date
+}
+
+getDateCreated :: FolderHandle -> IO Date
+getDateCreated fh =
+  case dateCreated fh of
+    Just d -> return d
+    Nothing ->
+      undefined
+
 
 
 
