@@ -4,6 +4,7 @@
 module Filter
   ( Prim2(..)
   , Pred(..)
+  , predEval
   ) where
 
 data Prim2 = And
