@@ -3,6 +3,5 @@ module Events
 
   ) where
 
-import System.INotify 
-
+import System.FSNotify
 

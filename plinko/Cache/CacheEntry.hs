@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 {-
@@ -8,8 +8,8 @@ files info against predicates.
 -}
 
 module Cache.CacheEntry
-  ( CacheEntry
-  , CacheEntryLens
+  ( FileInfo
+  , Field
   , FileType
   , size
   , mime
@@ -38,7 +38,7 @@ type PermsType = FileMode
 data FileType = File | Folder
   deriving (Show)
 
-data CacheEntry = CacheEntry 
+data FileInfo = FileInfo
   { _typ :: FileType
   , _size :: Maybe FSize
   , _mime ::  Maybe MimeType
@@ -48,11 +48,11 @@ data CacheEntry = CacheEntry
   , _perms :: Maybe PermsType
   } deriving (Show)
 
-type CacheEntryLens a = Lens' CacheEntry a
-makeLenses ''CacheEntry
+type Field a = Lens' FileInfo a
+makeLenses ''FileInfo
 
-makeCE :: FileType -> CacheEntry
-makeCE ft = CacheEntry
+makeCE :: FileType -> FileInfo
+makeCE ft = FileInfo
   { _typ = ft
   , _size = Nothing
   , _mime = Nothing
@@ -62,9 +62,9 @@ makeCE ft = CacheEntry
   , _perms = Nothing  
   }
 
-setCE :: CacheEntryLens a -> a -> CacheEntry -> CacheEntry
-setCE lens = set lens
+setCE :: Field a -> a -> FileInfo -> FileInfo
+setCE lens = set 
 
-getCE :: CacheEntryLens a -> CacheEntry -> a
-getCE lens = view lens
+getCE :: Field a -> FileInfo -> a
+getCE lens = view 
 
