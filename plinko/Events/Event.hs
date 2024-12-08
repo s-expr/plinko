@@ -7,7 +7,7 @@
 --Cute Event loop
 
 module Events.Event where
-import System.FSNotify 
+import System.FSNotify ()
 import Data.Functor.Identity
 import Debug.Trace
 import Data.Map
