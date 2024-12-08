@@ -1,6 +1,13 @@
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import <nixpkgs> { }; # pin the channel to ensure reproducibility!
+  # Add this if you are building a devShell in a flake. Usually, it's auto-detected
+  # using lib.inNixShell, but that doesn't work in flakes
+  # returnShellEnv = true;
 in
-  pkgs.haskellPackages.developPackage {
-    root = ./.;
-  }
+pkgs.haskellPackages.developPackage {
+  root = ./.;
+  modifier = drv:
+	  pkgs.haskell.lib.addBuildTools drv (with pkgs.haskellPackages; [
+			  cabal-install
+	  ]);
+}
